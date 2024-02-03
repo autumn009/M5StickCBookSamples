@@ -129,20 +129,144 @@ void ServerCommandReceived(object source, WebServerEventArgs e)
         sb.Append(html2);
         WebServer.OutPutStream(e.Context.Response, sb.ToString());
     }
-    catch (Exception)
+    catch (Exception ex)
     {
-        WebServer.OutputHttpCode(e.Context.Response, HttpStatusCode.InternalServerError);
+        var sb = new StringBuilder();
+        sb.Append(html1);
+        var r = M5StickC.AccelerometerGyroscope.GetAccelerometer();
+        sb.Append(ex.ToString());   // –{“–‚ÍŠÔˆá‚¢
+        sb.Append(html2);
+        WebServer.OutPutStream(e.Context.Response, sb.ToString());
     }
+}
+
+const string font09 = @"
+00000
+0   0
+0   0
+0   0
+0   0
+0   0
+00000
+ 111
+  11
+  11
+  11
+  11
+  11
+ 1111
+22222
+   22
+   22
+22222
+22
+22
+22222
+33333
+   33
+   33
+33333
+   33
+   33
+33333
+44 44
+44 44
+44 44
+44444
+   44
+   44
+   44
+55555
+55
+55
+55555
+   55
+   55
+55555
+66666
+66
+66
+66666
+66 66
+66 66
+66666
+77777
+   77
+   77
+  77
+  77
+  77
+  77
+88888
+88 88
+88 88
+88888
+88 88
+88 88
+88888
+99999
+99 99
+99 99
+99999
+   99
+   99
+99999
+";
+const string fontAZ = @"
+";
+
+bool[][] getFontSub(string font, int index)
+{
+    var reader = new StringReader(font);
+    for (int i = 0; i < index * 7; i++)
+    {
+        var s = reader.ReadLine();
+        if (s == null) return getFontSub(font09,0);
+    }
+    bool[][] r = new bool[7][];
+    for (int i = 0; i < 7; i++)
+    {
+        r[i] = new bool[5];
+        string line = reader.ReadLine();
+        if (line == null) return getFontSub(font09, 0);
+        for (int j = 0; j < 5; j++)
+        {
+            if(line.Length > j ) r[i][j] = line[j] != ' ';
+        }
+    }
+    return r;
+}
+
+bool[][] getFont(char ch)
+{
+    if( ch >= '0' && ch <= '9')
+    {
+        return getFontSub(font09, ch - '0');
+    }
+    else if( ch >= 'A' && ch <= 'Z')
+    {
+        return getFontSub(fontAZ, ch - 'A');
+    }
+    return getFontSub(font09, 0);
 }
 
 void DrawText(string text)
 {
-    for (int i = 0; i < toSend.Length; i++)
+    for (int i = 0; i < text.Length; i++)
     {
-        toSend[i] = red;
+         var img = getFont(text[i]);
+        for( int y = 0; y < 7; y++)
+        {
+            for (int x = 0; x < 5; x++)
+            {
+                if (img[y][x])
+                {
+                    toSend[x + i * 7] = white;
+                }
+            }
+        }
+        DisplayControl.Write((ushort)(i*6), 0, 5, 7, toSend);
     }
-
-    DisplayControl.Write(0, 0, 10, 10, toSend);
 }
 
 void GetSsidAndPassword()
@@ -217,4 +341,23 @@ void InitiM5Stick()
     // I2cWrite(Register.VoltageSettingOff, data);
     power.VoffVoltage = VoffVoltage.V3_0;
 
+}
+
+class StringReader:TextReader
+{
+    private string[] lines;
+    private int counter = 0;
+    public override string ReadLine()
+    {
+        if (counter >= lines.Length) return null;
+        return lines[counter++];
+    }
+    public StringReader(string src)
+    {
+        lines = src.Split('\n');
+        for (int i = 0; i < lines.Length; i++)
+        {
+            lines[i] = lines[i].Split('\r')[0];
+        }
+    }
 }
