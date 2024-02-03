@@ -44,7 +44,7 @@ using (WebServer server = new WebServer(80, HttpProtocol.Http, new Type[0]))
     Thread.Sleep(Timeout.Infinite);
 }
 
-const string html = @"
+const string html1 = @"
 <html>
 <head>
 <title>Multi Web Server on M5StickC</title>
@@ -56,7 +56,11 @@ const string html = @"
 <li><a href=""/ledon"">LED ON</a></li>
 <li><a href=""/ledoff"">LED OFF</a></li>
 </ul>
-
+<h2>Accelerometer</h2>
+<ul>
+";
+const string html2 = @"
+</ul>
 </body>
 </html>
 ";
@@ -76,7 +80,14 @@ void ServerCommandReceived(object source, WebServerEventArgs e)
         {
             M5StickC.Led.Write(true);
         }
-        WebServer.OutPutStream(e.Context.Response, html);
+        var sb = new StringBuilder();
+        sb.Append(html1);
+        var r = M5StickC.AccelerometerGyroscope.GetAccelerometer();
+        sb.Append($"<li>x={r.X}</li>");
+        sb.Append($"<li>y={r.Y}</li>");
+        sb.Append($"<li>z={r.Z}</li>");
+        sb.Append(html2);
+        WebServer.OutPutStream(e.Context.Response, sb.ToString());
     }
     catch (Exception)
     {
