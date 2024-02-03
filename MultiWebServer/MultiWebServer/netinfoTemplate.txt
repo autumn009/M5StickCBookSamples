@@ -1,1 +1,4 @@
-﻿
+﻿Your SSID here
+Your password here
+# 上の2行には無線LAN接続用のIDとパスワードを記述してから、netinfo.tmpにファイル名を変更して下さい。
+# 御注意!　行の順番は変えられません。
