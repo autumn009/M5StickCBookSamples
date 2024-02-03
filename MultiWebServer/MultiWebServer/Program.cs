@@ -56,6 +56,12 @@ const string html1 = @"
 <li><a href=""/ledon"">LED ON</a></li>
 <li><a href=""/ledoff"">LED OFF</a></li>
 </ul>
+
+<form action=""/"" method=""get"">
+  <input type =""text"" name=""msg"">
+  <input type=""submit"" value=""SEND (0-9,A-Z only)"">
+</form>
+
 <h2>Accelerometer</h2>
 <ul>
 ";
@@ -79,6 +85,12 @@ void ServerCommandReceived(object source, WebServerEventArgs e)
         else if (url.ToLower() == "/ledoff")
         {
             M5StickC.Led.Write(true);
+        }
+        var index = url.ToLower().IndexOf("?msg=");
+        if( index > 0)
+        {
+            var text = url.Substring(index + 5);
+            Debug.WriteLine($"Text: {text}");
         }
         var sb = new StringBuilder();
         sb.Append(html1);
