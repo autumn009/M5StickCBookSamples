@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading;
 
 Debug.WriteLine("Initializing...");
+M5StickC.InitializeScreen();
 
 string ssid = "";
 string password = "";
@@ -43,6 +44,23 @@ using (WebServer server = new WebServer(80, HttpProtocol.Http, new Type[0]))
     Thread.Sleep(Timeout.Infinite);
 }
 
+const string html = @"
+<html>
+<head>
+<title>Multi Web Server on M5StickC</title>
+</head>
+<body>
+<h1>Multi Web Server on M5StickC</h1>
+
+<ul>
+<li><a href=""/ledon"">LED ON</a></li>
+<li><a href=""/ledoff"">LED OFF</a></li>
+</ul>
+
+</body>
+</html>
+";
+
 void ServerCommandReceived(object source, WebServerEventArgs e)
 {
     try
@@ -50,19 +68,15 @@ void ServerCommandReceived(object source, WebServerEventArgs e)
         var url = e.Context.Request.RawUrl;
         Debug.WriteLine($"Command received: {url}, Method: {e.Context.Request.HttpMethod}");
 
-        if (url.ToLower() == "/sayhello")
+        if (url.ToLower() == "/ledon")
         {
-            // This is simple raw text returned
-            WebServer.OutPutStream(e.Context.Response, "It's working, url is empty, this is just raw text, /sayhello is just returning a raw text");
+            M5StickC.Led.Write(false);
         }
-        else if (url.Length <= 1)
+        else if (url.ToLower() == "/ledoff")
         {
-            // Here you can return a real html page for example
-
-            WebServer.OutPutStream(e.Context.Response, "<html><head>" +
-                "<title>Hi from nanoFramework Server</title></head>" +
-                "<body>This is a default page</body></html>");
+            M5StickC.Led.Write(true);
         }
+        WebServer.OutPutStream(e.Context.Response, html);
     }
     catch (Exception)
     {
