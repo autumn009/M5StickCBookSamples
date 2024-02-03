@@ -35,7 +35,7 @@ Configuration.SetPinFunction(13, DeviceFunction.SPI1_CLOCK);
 DisplayControl.Initialize(new SpiConfiguration(1, chipSelect, dataCommand, reset, backLightPin), new ScreenConfiguration(26, 1, 80, 160), 10 * 1024);
 Debug.WriteLine($"DisplayControl.MaximumBufferSize:{DisplayControl.MaximumBufferSize}");
 
-ushort[] toSend = new ushort[100];
+ushort[] toSend = new ushort[2240];
 var blue = Color.Blue.ToBgr565(); // aka
 var red = Color.Red.ToBgr565(); // ao
 var green = Color.Green.ToBgr565();
@@ -117,7 +117,7 @@ void ServerCommandReceived(object source, WebServerEventArgs e)
         if( index > 0)
         {
             var text = url.Substring(index + 5);
-            DrawText(text);
+            drawText(text);
             Debug.WriteLine($"Text: {text}");
         }
         var sb = new StringBuilder();
@@ -250,22 +250,33 @@ bool[][] getFont(char ch)
     return getFontSub(font09, 0);
 }
 
-void DrawText(string text)
+void pset(int x, int y)
+{
+    for (int yr = 0; yr < 8; yr++)
+    {
+        for (int xr = 0; xr < 8; xr++)
+        {
+            toSend[(x*8+xr)*7 + y * 8*yr] = white;
+        }
+    }
+}   
+
+void drawText(string text)
 {
     for (int i = 0; i < text.Length; i++)
     {
-         var img = getFont(text[i]);
-        for( int y = 0; y < 7; y++)
+        var img = getFont(text[i]);
+        for (int y = 0; y < 7; y++)
         {
             for (int x = 0; x < 5; x++)
             {
                 if (img[y][x])
                 {
-                    toSend[x + i * 7] = white;
+                    pset(x, i);
                 }
             }
         }
-        DisplayControl.Write((ushort)(i*6), 0, 5, 7, toSend);
+        DisplayControl.Write((ushort)(i * 6 * 8), 0, 5 * 8, 7 * 8, toSend);
     }
 }
 
