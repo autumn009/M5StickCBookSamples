@@ -35,11 +35,12 @@ Configuration.SetPinFunction(13, DeviceFunction.SPI1_CLOCK);
 DisplayControl.Initialize(new SpiConfiguration(1, chipSelect, dataCommand, reset, backLightPin), new ScreenConfiguration(26, 1, 80, 160), 10 * 1024);
 Debug.WriteLine($"DisplayControl.MaximumBufferSize:{DisplayControl.MaximumBufferSize}");
 
-ushort[] toSend = new ushort[2240];
 var blue = Color.Blue.ToBgr565(); // aka
 var red = Color.Red.ToBgr565(); // ao
 var green = Color.Green.ToBgr565();
 var white = Color.White.ToBgr565();
+ushort[] toSend = new ushort[8 * 8];
+for (int i = 0; i < toSend.Length; i++) toSend[i] = white;
 
 string ssid = "";
 string password = "";
@@ -256,13 +257,15 @@ void pset(int x, int y)
     {
         for (int xr = 0; xr < 8; xr++)
         {
-            toSend[(x*8+xr)*7 + y * 8*yr] = white;
+            DisplayControl.Write((ushort)(x * 8), (ushort)(y * 8), 8, 8, toSend);
+            //DisplayControl.Write(0, 0, 8, 8, toSend);
         }
     }
-}   
+}
 
 void drawText(string text)
 {
+    M5StickC.InitializeScreen();
     for (int i = 0; i < text.Length; i++)
     {
         var img = getFont(text[i]);
@@ -272,11 +275,10 @@ void drawText(string text)
             {
                 if (img[y][x])
                 {
-                    pset(x, i);
+                    pset(x, y);
                 }
             }
         }
-        DisplayControl.Write((ushort)(i * 6 * 8), 0, 5 * 8, 7 * 8, toSend);
     }
 }
 
