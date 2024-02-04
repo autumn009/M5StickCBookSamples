@@ -253,7 +253,11 @@ bool[][] getFont(char ch)
 
 void pset(int x, int y)
 {
-    DisplayControl.Write((ushort)(x * 8), (ushort)(y * 8), 8, 8, toSend);
+    var xr = (ushort)(x * 8);
+    var yr = (ushort)(79 - y * 8 - 8);
+    if (xr < 0 || yr < 0) return;
+    if (xr >= 160 - 8 || yr >= 80 - 8) return;
+    DisplayControl.Write(yr, xr, 8, 8, toSend);
 }
 
 void drawText(string text)
@@ -268,7 +272,7 @@ void drawText(string text)
             {
                 if (img[y][x])
                 {
-                    pset(x, y);
+                    pset(x+i*6, y);
                 }
             }
         }
