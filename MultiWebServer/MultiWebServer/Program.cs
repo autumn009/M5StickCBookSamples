@@ -265,7 +265,7 @@ void pset(int x, int y)
 
 void drawText(string text)
 {
-    M5StickC.InitializeScreen();
+    nanoFramework.M5Stack.Console.Clear();
     for (int i = 0; i < text.Length; i++)
     {
         var img = getFont(text[i]);
