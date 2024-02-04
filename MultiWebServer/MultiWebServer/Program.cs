@@ -213,7 +213,188 @@ const string font09 =
    99
 99999
 ";
-const string fontAZ = @"
+const string fontAZ = @"AAAAA
+AA AA
+AA AA
+AAAAA
+AA AA
+AA AA
+AA AA
+BBBB
+BB BB
+BB BB
+BBBB
+BB BB
+BB BB
+BBBB
+ CCC
+CC CC
+CC
+CC
+CC
+CC CC
+ CCC
+DDDD
+DD DD
+DD DD
+DD DD
+DD DD
+DD DD
+DDDD
+EEEEE
+EE
+EE
+EEEE
+EE
+EE
+EEEEE
+FFFFF
+FF
+FF
+FFFF
+FF
+FF
+FF
+ GGG
+GG GG
+GG
+GG
+GG GG
+GG  G
+ GGG
+HH HH
+HH HH
+HH HH
+HHHHH
+HH HH
+HH HH
+HH HH
+ III
+  I
+  I
+  I
+  I
+  I
+ III
+ JJJ
+  J
+  J
+  J
+  J
+J J
+ JJ
+KK  K
+KK  K
+KK KK
+KKKK
+KK KK
+KK  K
+KK  K
+LL
+LL
+LL
+LL
+LL
+LL
+LLLLL
+M   M
+MM MM
+M M M
+M   M
+M   M
+M   M
+N   N
+NN  N
+N N N
+N N N
+N N N
+N  NN
+N   N
+N   N
+00000
+0   0
+0   0
+0   0
+0   0
+0   0
+00000
+PPPP
+PP PP
+PP PP
+PPPP
+PP
+PP
+PP
+QQQQQ
+Q   Q
+Q   Q
+Q   Q
+Q Q Q
+Q  QQ
+QQQQQ
+RRRR
+RR RR
+RR RR
+RRRR
+RR RR
+RR RR
+RR RR
+ SSS
+SS SS
+SS
+ SSS
+   SS
+SS SS
+ SSS
+TTTTT
+  T
+  T
+  T
+  T
+  T
+  T
+U   U
+U   U
+U   U
+U   U
+U   U
+U   U
+ UUU
+V   V
+V   V
+V   V
+V   V
+ V V
+ V V
+  V
+W W W
+W W W
+W W W
+W W W
+W W W
+ W W
+ W W
+X   X
+X   X
+ X X
+  X
+ X X
+X   X
+X   X
+Y   Y
+Y   Y
+ Y Y
+  Y
+  Y
+  Y
+  Y
+ZZZZZ
+   ZZ
+  ZZ
+ ZZ
+ZZ
+ZZ
+ZZZZZ
 ";
 
 bool[][] getFontSub(string font, int index)
