@@ -141,8 +141,8 @@ void ServerCommandReceived(object source, WebServerEventArgs e)
     }
 }
 
-const string font09 = @"
-00000
+const string font09 =
+@"00000
 0   0
 0   0
 0   0
