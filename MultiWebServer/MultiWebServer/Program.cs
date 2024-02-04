@@ -253,14 +253,7 @@ bool[][] getFont(char ch)
 
 void pset(int x, int y)
 {
-    for (int yr = 0; yr < 8; yr++)
-    {
-        for (int xr = 0; xr < 8; xr++)
-        {
-            DisplayControl.Write((ushort)(x * 8), (ushort)(y * 8), 8, 8, toSend);
-            //DisplayControl.Write(0, 0, 8, 8, toSend);
-        }
-    }
+    DisplayControl.Write((ushort)(x * 8), (ushort)(y * 8), 8, 8, toSend);
 }
 
 void drawText(string text)
