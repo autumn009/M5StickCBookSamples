@@ -429,10 +429,14 @@ bool[][] getFont(char ch)
     {
         return getFontSub(fontAZ, ch - 'A');
     }
+    else if (ch >= 'a' && ch <= 'z')
+    {
+        return getFontSub(fontAZ, ch - 'a');
+    }
     return getFontSub(font09, 0);
 }
 
-const int xPixelUnit = 2;
+const int xPixelUnit = 3;
 const int yPixelUnit = 8;
 
 void pset(int x, int y)
